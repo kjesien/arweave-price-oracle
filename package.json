@@ -4,7 +4,7 @@
   "description": "Oracle providing exchange prices of Arweave",
   "main": "oracle.js",
   "scripts": {
-    "start": "tsc && node dist/app.js",
+    "start": "tsc && node dist/oracle.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -22,11 +22,12 @@
   "homepage": "https://github.com/kjesien/arweave-price-oracle#readme",
   "dependencies": {
     "arweave": "^1.10.18",
+    "axios": "^0.24.0",
     "dotenv": "^10.0.0"
   },
   "devDependencies": {
-    "tslint": "^6.1.3",
     "@types/node": "^16.11.6",
+    "tslint": "^6.1.3",
     "typescript": "^4.4.4"
   }
 }

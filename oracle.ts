@@ -1,3 +1,5 @@
+import { ArweaveExchangePrices } from "./exchange-prices";
+
 const fs = require("fs");
 const Arweave = require("arweave");
 require("dotenv").config();
@@ -17,10 +19,13 @@ if (!ORACLE_TAG) throw new Error("ARWEAVE_ORACLE_TAG not specified in .env");
 
 const wallet = JSON.parse(fs.readFileSync(WALLET_PATH));
 
-const arwevePricesJson = ""; // TODO: Implement data aggregation in exchange-prices.ts
-
 async function uploadNewPrices() {
-  let tx = await arweave.createTransaction({ data: arwevePricesJson }, wallet);
+  const arwevePrices = await ArweaveExchangePrices.fetchAggregatedData();
+
+  const tx = await arweave.createTransaction(
+    { data: JSON.stringify(arwevePrices) },
+    wallet
+  );
   tx.addTag("Content-Type", "application/json");
   tx.addTag("Secret", ORACLE_TAG);
 
@@ -54,3 +59,9 @@ async function checkTxConfirmation(txId: string) {
     await new Promise((resolve) => setTimeout(resolve, 60000));
   }
 }
+
+function main() {
+  setInterval(() => uploadNewPrices(), 180000); // 180 000 - 3 minutes - avg Arweave block time
+}
+
+main();
